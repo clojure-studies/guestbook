@@ -1,4 +1,5 @@
 (ns guestbook.routes.home
+  (:refer-clojure :exclude [test])
   (:require [compojure.core :refer :all]
             [guestbook.views.layout :as layout]
             [hiccup.form :refer :all]
