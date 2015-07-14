@@ -7,7 +7,10 @@
             [compojure.route :as route]
             [guestbook.routes.home :refer [home-routes]]
             [guestbook.models.db :as db]
-            [guestbook.routes.auth :refer [auth-routes]]))
+            [guestbook.routes.auth :refer [auth-routes]]
+            [noir.session :as session]
+            [noir.validation :refer [wrap-noir-validation]]
+            [ring.middleware.session.memory :refer [memory-store]]))
 
 (defn init []
   (println "guestbook is starting")
@@ -22,6 +25,11 @@
   (route/not-found "Not Found"))
 
 (def app
-  (-> (routes auth-routes home-routes app-routes)
+  (-> (routes auth-routes
+              home-routes
+              app-routes)
       (handler/site)
-      (wrap-base-url)))
+      (wrap-base-url)
+      (session/wrap-noir-session
+        { :store (memory-store) })
+      (wrap-noir-validation)))

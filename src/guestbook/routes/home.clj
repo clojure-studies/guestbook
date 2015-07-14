@@ -2,7 +2,9 @@
   (:require [compojure.core :refer :all]
             [guestbook.views.layout :as layout]
             [hiccup.form :refer :all]
-            [guestbook.models.db :as db]))
+            [guestbook.models.db :as db]
+            [noir.response :refer [redirect]]
+            [noir.session :as session]))
 
 (defn format-time [timestamp]
   (-> "dd/MM/yyyy"
@@ -19,7 +21,7 @@
 
 (defn home [& [name, message, error]]
   (layout/common
-    [:h1 "Guestbook"]
+    [:h1 "Guestbook " (session/get :user)]
     [:p "Welcome to my guestbook"]
     [:p error]
     (show-guests)
@@ -49,4 +51,11 @@
 (defroutes home-routes
   (GET "/" [] (home))
   (GET "/test" request (test request))
-  (POST "/" [name message] (save-message name message)))
+  (POST "/" [name message] (save-message name message))
+  (GET "/logout" []
+       (layout/common
+         (form-to [:post "/logout"]
+                  (submit-button "logout"))))
+  (POST "/logout" []
+        (session/clear!)
+        (redirect "/")))
