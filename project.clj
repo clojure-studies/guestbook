@@ -14,9 +14,10 @@
          :init guestbook.handler/init
          :destroy guestbook.handler/destroy}
   :profiles
-  {:uberjar {:aot :all}
+  {:uberjar {:main guestbook.web :aot :all}
    :production
    {:ring
     {:open-browser? false, :stacktraces? false, :auto-reload? false}}
    :dev
    {:open-browser? false, :dependencies [[ring-mock "0.1.5"] [ring/ring-devel "1.3.1"]]}})
+  :uberjar-name "guestbook-standalone.jar"
