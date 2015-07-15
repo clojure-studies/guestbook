@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -cp target/guestbook-standalone.jar clojure.main -m guestbook.web
+web: java $JVM_OPTS -cp target/guestbook-0.1.0-SNAPSHOT-standalone.jar guestbook.handler.app -m guestbook.web
